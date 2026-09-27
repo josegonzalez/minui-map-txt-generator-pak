@@ -18,6 +18,10 @@ if uname -m | grep -q '64'; then
 fi
 
 export PATH="$PAK_DIR/bin/$architecture:$PAK_DIR/bin/$PLATFORM:$PAK_DIR/bin:$PATH"
+
+if [ "$DEVICE" = "rgsp" ]; then
+    export RGXX_MODEL="RG34xx"
+fi
 export LD_LIBRARY_PATH="$PAK_DIR/lib/$architecture:$PAK_DIR/lib/$PLATFORM:$PAK_DIR/lib:$LD_LIBRARY_PATH"
 export IMAGE_MATCHER_URL="https://matching-images-is.bittersweet.rip"
 export MINUI_IMAGE_WIDTH=300
@@ -36,7 +40,7 @@ main_screen() {
     fi
 
     killall minui-presenter >/dev/null 2>&1 || true
-    minui-list --disable-auto-sleep --item-key "folders" --file "/tmp/emus.list" --format text --cancel-text "EXIT" --title "Select ROM Folder for map.txt" --write-location /tmp/minui-output --write-value selected
+    minui-list --disable-auto-sleep --item-key "folders" --file "/tmp/emus.list" --format text --cancel-text "EXIT" --title "Select ROM Folder for map.txt" --write-location /tmp/minui-output --write-value selected 1>&2
 }
 
 action_menu() {
@@ -65,7 +69,7 @@ action_menu() {
     } >>/tmp/action.list
 
     killall minui-presenter >/dev/null 2>&1 || true
-    minui-list --disable-auto-sleep --item-key "actions" --file "/tmp/action.list" --format text --cancel-text "BACK" --title "Select Dat File for $ROM_FOLDER" --write-location /tmp/action-output --write-value selected
+    minui-list --disable-auto-sleep --item-key "actions" --file "/tmp/action.list" --format text --cancel-text "BACK" --title "Select Dat File for $ROM_FOLDER" --write-location /tmp/action-output --write-value selected 1>&2
 
     if [ $? -ne 0 ]; then
         return 1
@@ -133,7 +137,7 @@ main() {
         export PLATFORM="tg5040"
     fi
 
-    allowed_platforms="miyoomini my282 my355 rg35xxplus tg5040 tg5050"
+    allowed_platforms="h700 miyoomini my282 my355 rg35xxplus tg5040 tg5050"
     if ! echo "$allowed_platforms" | grep -q "$PLATFORM"; then
         show_message "$PLATFORM is not a supported platform" 2
         return 1
