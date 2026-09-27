@@ -6,6 +6,7 @@
   "repo_url": "https://github.com/josegonzalez/minui-map-txt-pak",
   "release_filename": "Map.txt.Generator.pak.zip",
   "platforms": [
+    "h700",
     "miyoomini",
     "my282",
     "my355",
